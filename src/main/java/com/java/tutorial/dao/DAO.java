@@ -16,9 +16,6 @@ public abstract class DAO<T> {
 
     public abstract void delete() throws DAOException;
 
-    public abstract void delete(long id) throws DAOException;
-
-
     public abstract void deleteById(T entity) throws DAOException;
 
     public abstract T selectById(long id) throws DAOException;

@@ -50,11 +50,6 @@ public class TransactionDAO extends DAO<Transaction> {
     }
 
     @Override
-    public void delete(long id) throws DAOException {
-
-    }
-
-    @Override
     public void deleteById(Transaction entity) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(TRANSACTION_DELETE_BY_ID)){
             preparedStatement.setLong(1, entity.getId());

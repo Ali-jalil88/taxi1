@@ -4,9 +4,7 @@ import com.java.tutorial.command.impl.account.AccountByLogin;
 import com.java.tutorial.command.impl.account.AccountLogout;
 import com.java.tutorial.command.impl.account.CreateAccount;
 import com.java.tutorial.command.impl.location.CreateLocation;
-import com.java.tutorial.command.impl.order.OrderCreate;
-import com.java.tutorial.command.impl.order.TaxiOrderAcceptance;
-import com.java.tutorial.command.impl.order.TaxiOrders;
+import com.java.tutorial.command.impl.order.*;
 import com.java.tutorial.service.impl.AccountService;
 import com.java.tutorial.service.impl.LocationService;
 import com.java.tutorial.service.impl.OrderService;
@@ -41,6 +39,19 @@ public class CommandFactory {
             case "logout":
                 System.out.println("logout");
                 return new AccountLogout(new AccountService());
+
+            case "command_read_order":
+                System.out.println("command_read_order");
+                return new OrderInProgress(new OrderService());
+
+            case "command_finish_order":
+                System.out.println("command_finish_order");
+                return new OrderFinish(new OrderService());
+
+            case "command_order_relist":
+                System.out.println("command_order_relist");
+                return new OrderRelist(new OrderService());
+
             default:return null;
         }
     }

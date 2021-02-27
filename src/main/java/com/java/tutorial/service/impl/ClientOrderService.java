@@ -1,35 +1,57 @@
 package com.java.tutorial.service.impl;
 
 import com.java.tutorial.dao.impl.ClientOrderDAO;
+import com.java.tutorial.entities.ClientOrders;
 import com.java.tutorial.exceptions.DAOException;
 import com.java.tutorial.exceptions.ServiceException;
 import com.java.tutorial.service.CRUDService;
 
 import java.util.List;
 
-public class ClientOrderService extends CRUDService {
+public class ClientOrderService extends CRUDService<ClientOrders> {
     ClientOrderDAO clientOrderDAO = new ClientOrderDAO();
-    @Override
-    public void create(Object entity) throws ServiceException {
-
-    }
 
     @Override
-    public Object readById(long id) throws ServiceException {
+    public void create(ClientOrders entity) throws ServiceException {
         try {
-            return clientOrderDAO.select();
+            clientOrderDAO.insert(entity);
         } catch (DAOException e) {
-            throw new ServiceException("can't read clientOrder by id");
+            throw   new ServiceException("cant insert clientOrder");
         }
     }
 
     @Override
-    public List read() throws ServiceException {
+    public ClientOrders readById(long id) throws ServiceException {
+        try {
+            return clientOrderDAO.selectById(id);
+        } catch (DAOException e) {
+            throw new ServiceException("cant read clientOrder by id");
+        }
+    }
+
+    public ClientOrders readByClientId(long id) throws ServiceException {
+        try {
+            return clientOrderDAO.selectByClientId(id);
+        } catch (DAOException e) {
+            throw new ServiceException("cant read clientOrder by clientId");
+        }
+    }
+
+    public ClientOrders readByOrderId(long id) throws ServiceException {
+        try {
+            return clientOrderDAO.selectByOrderId(id);
+        } catch (DAOException e) {
+            throw new ServiceException("cant read clientOrder by orderId");
+        }
+    }
+
+    @Override
+    public List<ClientOrders> read() throws ServiceException {
         return null;
     }
 
     @Override
-    public void update(Object entity) throws ServiceException {
+    public void update(ClientOrders entity) throws ServiceException {
 
     }
 
@@ -39,16 +61,11 @@ public class ClientOrderService extends CRUDService {
     }
 
     @Override
-    public void deleteById(Object entity) throws ServiceException {
-
-    }
-
-    @Override
-    public void delete(long id) throws ServiceException {
+    public void deleteById(ClientOrders entity) throws ServiceException {
         try {
-            clientOrderDAO.delete();
+            clientOrderDAO.deleteById(entity);
         } catch (DAOException e) {
-            throw new ServiceException("can't delete clientOrder in service");
+            throw new ServiceException("cant delete by id in service");
         }
     }
 }

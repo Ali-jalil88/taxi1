@@ -6,10 +6,7 @@ import com.java.tutorial.entities.Order;
 import com.java.tutorial.entities.OrderStatus;
 import com.java.tutorial.exceptions.DAOException;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class OrderDAO extends DAO<Order> {
     public boolean update(Order entity) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ORDER_UPDATE)){
             setting(entity, preparedStatement);
-            preparedStatement.setLong(8, entity.getId());
+            preparedStatement.setLong(9, entity.getId());
             int i = preparedStatement.executeUpdate();
             if (i==1) {
                 return true;
@@ -49,11 +46,6 @@ public class OrderDAO extends DAO<Order> {
         } catch (SQLException e) {
             throw new DAOException("deleting orders in dao failed");
         }
-    }
-
-    @Override
-    public void delete(long id) throws DAOException {
-
     }
 
     @Override
@@ -123,10 +115,11 @@ public class OrderDAO extends DAO<Order> {
         } return null;
     }
 
-    public Order selectUnfinishedOrders(long id, OrderStatus orderStatus) throws DAOException {
+    public Order selectUnfinishedOrders(long id, OrderStatus orderStatus, long transactionId) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_UNFINISHED_ORDERS)){
             preparedStatement.setLong(1, id);
             preparedStatement.setString(2, String.valueOf(orderStatus));
+            preparedStatement.setLong(3, transactionId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return selection(resultSet);
@@ -139,7 +132,7 @@ public class OrderDAO extends DAO<Order> {
     public List<Order> selectFinishedOrders(OrderStatus orderStatus) throws DAOException {
         List<Order> orderList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_FINISHED_ORDERS)){
-            preparedStatement.setString(2, String.valueOf(orderStatus));
+            preparedStatement.setString(1, String.valueOf(orderStatus));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Order order = selection(resultSet);
@@ -151,12 +144,32 @@ public class OrderDAO extends DAO<Order> {
         return orderList;
     }
 
+    public long getLastId() throws DAOException, SQLException {
+        try(Statement statement = connection.createStatement()) {
+            String query=  String.format(LAST_INSERT, "order");
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                return resultSet.getLong("currval");
+            }
+            throw new DAOException("no id has been found");
+        } catch (SQLException e) {
+            throw new DAOException("no id has been found");
+        }
+    }
+
     private Order selection(ResultSet resultSet) throws SQLException {
         Order order = new Order();
         Location location = new Location();
+        Location location1 = new Location();
         order.setId(resultSet.getLong("id"));
         order.setTaxiId(resultSet.getLong("taxi_id"));
         order.setClientId(resultSet.getLong("client_id"));
+
+        location.setId(resultSet.getLong("source_id"));
+        location1.setId(resultSet.getLong("destination_id"));
+
+        order.setSource(location);
+        order.setDestination(location1);
         order.setTransactionId(resultSet.getLong("transaction_id"));
         order.setPrice(resultSet.getDouble("price"));
         order.setDate(String.valueOf(resultSet.getDate("date")));

@@ -48,11 +48,6 @@ public class AccountDAO extends DAO<Account> {
     }
 
     @Override
-    public void delete(long id) throws DAOException {
-
-    }
-
-    @Override
     public void deleteById(Account entity) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ACCOUNT_DELETE_BY_ID)) {
             preparedStatement.setLong(1, entity.getId());

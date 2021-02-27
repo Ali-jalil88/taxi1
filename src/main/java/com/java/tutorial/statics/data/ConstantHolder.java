@@ -43,14 +43,20 @@ public class ConstantHolder {
     public static final String ORDER_DELETE_ALL = "DELETE FROM \"order\"";
     public static final String ORDER_DELETE_BY_ID = "DELETE FROM \"order\" WHERE id=?";
     public static final String SELECT_ORDER_FOR_TAXI = "SELECT * FROM \"order\" WHERE taxi_id=?";
-    public static final String SELECT_UNFINISHED_ORDERS = "SELECT * FROM \"order\" WHERE client_id=? AND type=?";
+    public static final String SELECT_UNFINISHED_ORDERS = "SELECT * FROM \"order\" WHERE client_id=? AND type=? AND transaction_id=?";
     public static final String SELECT_FINISHED_ORDERS = "SELECT * FROM \"order\" WHERE type=?";
 
+    public static final String INSERT_TAXI_ORDERS = "INSERT INTO taxi_orders (order_id, taxi_id) VALUES (?, ?)";
     public static final String SELECT_TAXI_ORDERS_BY_ID = "SELECT * FROM taxi_orders WHERE id=?";
     public static final String DELETE_TAXI_ORDERS_BY_ID = "DELETE FROM taxi_orders WHERE id=?";
+    public static final String SELECT_TAXI_ORDERS_BY_TAXI_ID = "SELECT * FROM taxi_orders WHERE taxi_id=?";
+    public static final String SELECT_TAXI_ORDERS_BY_ORDER_ID = "SELECT * FROM taxi_orders WHERE order_id=?";
 
+    public static final String INSERT_CLIENT_ORDERS = "INSERT INTO client_orders (order_id, client_id) VALUES (?, ?)";
     public static final String SELECT_CLIENT_ORDERS_BY_ID = "SELECT * FROM client_orders WHERE id=?";
     public static final String DELETE_CLIENT_ORDERS_BY_ID = "DELETE FROM client_orders WHERE id=?";
+    public static final String SELECT_CLIENT_ORDERS_BY_CLIENT_ID = "SELECT * FROM client_orders WHERE client_id=?";
+    public static final String SELECT_CLIENT_ORDERS_BY_ORDER_ID = "SELECT * FROM client_orders WHERE order_id=?";
 
     public static final String LAST_INSERT = "SELECT currval(pg_get_serial_sequence('%s','id'))";
 

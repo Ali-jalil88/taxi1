@@ -69,11 +69,6 @@ public class AccountService extends CRUDService<Account> {
         }
     }
 
-    @Override
-    public void delete(long id) throws ServiceException {
-
-    }
-
     public Account login(Account entity) throws ServiceException {
         try {
             return accountDAO.login(entity.getUserName(), entity.getPassword());

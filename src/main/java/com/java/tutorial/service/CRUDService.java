@@ -18,9 +18,4 @@ public abstract class CRUDService<T> {
 
     public abstract void deleteById(T entity) throws ServiceException;
 
-    public abstract void delete(long id) throws ServiceException;
-
-
-
-
 }

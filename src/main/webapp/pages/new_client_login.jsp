@@ -12,35 +12,37 @@
         <c:forEach var="orders" items="${sessionScope.orderList}">
             <c:set var="count" value="${pageScope.count+1}"/>
 
-            <div>
-                <label for="price"></label>
-                <input type="text" id="price" name="price" placeholder="price">
-            </div>
+                    <div>
+                        <label for="price"></label>
+                        <input type="text" id="price" name="price" placeholder="price">
+                    </div>
 
+                    <a href="new_client_login.jsp?index=${count}">
 
-            <a href="new_client_login.jsp?index=${count}">
-                <form action="${pageContext.request.contextPath}/taxi" method="get">
-
-                <ul>
+                    <ul>
                     <label>
                         <textarea id="status" name="status" contenteditable="false" aria-multiline="false"
                                   autocomplete="off" rows="1">${orders.source}</textarea>
                     </label>
 
-                    <div>
-                        <input type="submit" name="taxi_orders" value="accept">
-                    </div>
-
-                    <div>
-                        <input type="submit" name="delete" value="delete">
-                    </div>
-
+                   <label>
+                        <textarea id="id" name="id" contenteditable="false" aria-multiline="false"
+                                  autocomplete="off" rows="1" hidden>${orders.id}</textarea>
+                    </label>
                 </ul>
-                    <input type="hidden" name="command" value="taxi_order_acceptance">
-                </form>
+                    </a>
 
-            </a>
+            <form action="${pageContext.request.contextPath}/taxi" method="post">
+                <div>
+                    <input type="submit" name="taxi_orders" value="accept">
+                </div>
 
+                <input type="hidden" name="command" value="taxi_order_acceptance">
+            </form>
+
+            <form action="${pageContext.request.contextPath}/taxi" method="post">
+                // hide using css or a function.
+            </form>
         </c:forEach>
         <%--                <div>--%>
         <%--                    <input type="submit" name="decline" value="decline">--%>

@@ -17,16 +17,33 @@
     </form>
     <div>
         <c:if test="${sessionScope.account.type == 'ADMIN'}">
-            <%--            <c:forEach var="account" items="${sessionScope.accountList}">--%>
-            <%--                <ul>--%>
-            <%--                    <li>${account.id}</li>--%>
-            <%--                    <li>${account.userName}</li>--%>
-            <%--                </ul>--%>
-            <%--            </c:forEach>--%>
+            <%session.getAttribute("readyOrders");%>
+            <c:forEach var="orders" items="${sessionScope.orderList}">
+                 <div>
+                        <ul>
+                            <label>
+                        <textarea id="status" name="status" contenteditable="false" aria-multiline="false"
+                                  autocomplete="off" rows="1">${orders.source}</textarea>
+                            </label>
+
+                            <label>
+                        <textarea id="id" name="id" contenteditable="false" aria-multiline="false"
+                                  autocomplete="off" rows="1" hidden>${orders.id}</textarea>
+                            </label>
+                        </ul>
+                 </div>
+            </c:forEach>
         </c:if>
         <c:if test="${sessionScope.account.type == 'CLIENT'}">
+
+
+                <a href="client_orders.jsp" type="submit">fuck</a>
+
+
+
             <form action="${pageContext.request.contextPath}/taxi" method="post">
                 <div>
+
                         <%--@declare id="location"--%><label for="location"></label>
                     <input type="text" id="l-lng" name="l-lng" placeholder="lng" required>
                     <input type="text" id="l-lat" name="l-lat" placeholder="lat" required>

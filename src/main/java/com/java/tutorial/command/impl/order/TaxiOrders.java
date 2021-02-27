@@ -5,9 +5,11 @@ import com.java.tutorial.devObjs.Page;
 import com.java.tutorial.entities.Account;
 import com.java.tutorial.entities.Location;
 import com.java.tutorial.entities.Order;
+import com.java.tutorial.entities.TaxiOrder;
 import com.java.tutorial.exceptions.ServiceException;
 import com.java.tutorial.service.impl.LocationService;
 import com.java.tutorial.service.impl.OrderService;
+import com.java.tutorial.service.impl.TaxiOrderService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +21,7 @@ public class TaxiOrders implements Command {
 
     private OrderService orderService;
     LocationService locationService = new LocationService();
+    private TaxiOrderService taxiOrderService = new TaxiOrderService();
 
     public TaxiOrders(OrderService orderService) {
         this.orderService = orderService;
@@ -28,6 +31,7 @@ public class TaxiOrders implements Command {
     public Page execute(HttpServletRequest request) throws ServiceException {
         Page page = new Page("/pages/new_client_login.jsp", true);
         List<Order> orderList = new ArrayList<>();
+        TaxiOrder taxiOrder = new TaxiOrder();
 
         HttpSession session = request.getSession();
         Account client = new Account();
@@ -40,6 +44,7 @@ public class TaxiOrders implements Command {
 
         orderList.addAll(orderService.readWaitingOrders(-1));
         System.out.println(client + "account brought from session in TaxiOrder");
+
 
         session.setAttribute("orderList", orderList);
         return page;

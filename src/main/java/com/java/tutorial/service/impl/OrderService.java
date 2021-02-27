@@ -7,6 +7,7 @@ import com.java.tutorial.exceptions.DAOException;
 import com.java.tutorial.exceptions.ServiceException;
 import com.java.tutorial.service.CRUDService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class OrderService extends CRUDService<Order> {
@@ -83,12 +84,23 @@ public class OrderService extends CRUDService<Order> {
         }
     }
 
-    public Order readUnfinishedOrders(long id, OrderStatus orderStatus) throws ServiceException {
+    public Order readUnfinishedOrders(long id, OrderStatus orderStatus, long transactionId) throws ServiceException {
         try {
-            return orderDAO.selectUnfinishedOrders(id, orderStatus);
+            return orderDAO.selectUnfinishedOrders(id, orderStatus, transactionId);
         } catch (DAOException e) {
             throw new ServiceException("cant get unfinished orders in service");
         }
+    }
+
+    public long getLastId() throws ServiceException {
+        try {
+            return orderDAO.getLastId();
+        } catch (DAOException e) {
+            throw new ServiceException("cant find id in service");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return 0;
     }
 
     public List<Order> readFinishedOrders(OrderStatus orderStatus) throws ServiceException {

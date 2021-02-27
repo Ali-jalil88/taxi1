@@ -52,11 +52,6 @@ public class LocationDAO extends DAO<Location> {
     }
 
     @Override
-    public void delete(long id) throws DAOException {
-
-    }
-
-    @Override
     public void deleteById(Location entity) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(LOCATION_DELETE_BY_ID)){
             preparedStatement.setLong(1, entity.getId());

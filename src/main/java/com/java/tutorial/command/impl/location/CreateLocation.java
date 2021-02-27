@@ -2,11 +2,9 @@ package com.java.tutorial.command.impl.location;
 
 import com.java.tutorial.command.Command;
 import com.java.tutorial.devObjs.Page;
-import com.java.tutorial.entities.Account;
-import com.java.tutorial.entities.Location;
-import com.java.tutorial.entities.Order;
-import com.java.tutorial.entities.OrderStatus;
+import com.java.tutorial.entities.*;
 import com.java.tutorial.exceptions.ServiceException;
+import com.java.tutorial.service.impl.ClientOrderService;
 import com.java.tutorial.service.impl.LocationService;
 import com.java.tutorial.service.impl.OrderService;
 
@@ -18,6 +16,7 @@ import java.time.LocalDate;
 public class CreateLocation implements Command {
 
     private LocationService locationService;
+    private ClientOrderService clientOrderService = new ClientOrderService();
 
     public CreateLocation(LocationService locationService) {
         this.locationService = locationService;
@@ -30,6 +29,7 @@ public class CreateLocation implements Command {
         Account client = (Account) session.getAttribute("account");
         Order order = new Order();
         System.out.println("getting account from session in CreateLocation.." + client);
+        ClientOrders clientOrders = new ClientOrders();
 
         Location loc = new Location();
         Location loc1 = new Location();
@@ -58,7 +58,13 @@ public class CreateLocation implements Command {
 //        session.setAttribute("destination", location1);
 //        session.setAttribute("clientId", client.getId());
 
-        setOrder(client, loc, loc1);
+        order = setOrder(client, loc, loc1);
+        clientOrders.setClientId(client.getId());
+        System.out.println(client.getId() + "check clientOrder client id");
+        clientOrders.setOrderId(order.getId());
+        System.out.println(order.getId() + "check clientId orderId");
+        System.out.println(order.getId());
+        clientOrderService.create(clientOrders);
         return page;
     }
 
@@ -75,6 +81,7 @@ public class CreateLocation implements Command {
         order.setTransactionId(-1);
         order.setStatus(OrderStatus.WAITING);
         orderService.create(order);
+        order.setId(orderService.getLastId());
         System.out.println("printing initial order in CreateLocation for checkUp " + order);
         return order;
     }
